@@ -25,6 +25,7 @@ func (h *apiHandler) RegisterRoutes(r *gin.Engine) {
 }
 
 // CreateUser godoc
+// @Tags User
 // @Summary Create user
 // @Description Create user
 // @Accept  json
@@ -48,6 +49,7 @@ func (h *apiHandler) Create(c *gin.Context) {
 }
 
 // GetUserById godoc
+// @Tags User
 // @Summary Get user by ID
 // @Description Get user by ID
 // @Accept  json
@@ -67,6 +69,7 @@ func (h *apiHandler) GetById(c *gin.Context) {
 }
 
 // ListUsers godoc
+// @Tags User
 // @Summary List users
 // @Description List users
 // @Accept  json
@@ -84,6 +87,7 @@ func (h *apiHandler) List(c *gin.Context) {
 }
 
 // UpdateUser godoc
+// @Tags User
 // @Summary Update user
 // @Description Update user
 // @Accept  json
@@ -116,6 +120,7 @@ func (h *apiHandler) Update(c *gin.Context) {
 }
 
 // DeleteUser godoc
+// @Tags User
 // @Summary Delete user
 // @Description Delete user
 // @Accept  json
