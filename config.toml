@@ -1,0 +1,2 @@
+Dsn="database.sqlite"
+DbDriver="sqlite"
