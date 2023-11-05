@@ -1,6 +1,9 @@
 package user
 
 import (
+	"crypto/md5"
+	"encoding/hex"
+
 	"github.com/aldhipradana/apidemo/schemas"
 	"gorm.io/gorm"
 )
@@ -10,6 +13,13 @@ type Usecases struct {
 }
 
 func (u *Usecases) Create(user *schemas.User) error {
+	hash := md5.New()
+
+	// md5 hash user password
+	hash.Write([]byte(user.Password))
+	hashed := hash.Sum(nil)
+	user.Password = hex.EncodeToString(hashed)
+
 	return u.Db.Create(user).Error
 }
 

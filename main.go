@@ -31,7 +31,7 @@ func main() {
 		Ge:     router,
 	}
 	// Handle the Swagger route
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/apiDocs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Add your other routes here
 	// router.GET("/users/:id", getUserByID)
