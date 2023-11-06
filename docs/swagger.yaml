@@ -74,7 +74,11 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
           schema:
             type: string
       summary: Delete notes
@@ -180,7 +184,11 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
           schema:
             type: string
       summary: Delete user

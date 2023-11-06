@@ -135,18 +135,24 @@ func (h *apiHandler) Update(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "Notes ID"
-// @Success 200 {object} string
+// @Success      200              {string}  string    "success"
+// @failure      400              {string}  string    "error"
 // @Router /notes/{id} [delete]
 func (h *apiHandler) Delete(c *gin.Context) {
-	id := c.Param("id")
-	if id == "" {
+	id := uuid.FromStringOrNil(c.Param("id"))
+	if id == uuid.Nil {
 		c.JSON(400, gin.H{"error": "ID is required"})
 		return
 	}
 
-	uid := uuid.FromStringOrNil(id)
+	// find notes
+	_, err := h.uc.GetById(id)
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
 
-	if err := h.uc.Delete(uid); err != nil {
+	if err := h.uc.Delete(id); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
