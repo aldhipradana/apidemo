@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/aldhipradana/apidemo/config"
 	_ "github.com/aldhipradana/apidemo/docs"
+	"github.com/aldhipradana/apidemo/modules/notes"
 	"github.com/aldhipradana/apidemo/modules/user"
 	"gorm.io/gorm"
 
@@ -38,10 +41,13 @@ func main() {
 
 	app.RegisterRoutes()
 
+	fmt.Println("Starting server on port 8082")
+	fmt.Println("Swagger docs on http://localhost:8082/apiDocs/index.html")
 	router.Run(":8082")
 }
 
 func (a *App) RegisterRoutes() {
 	// Register routes here
 	user.NewHandler(a.DB).RegisterRoutes(a.Ge)
+	notes.NewHandler(a.DB).RegisterRoutes(a.Ge)
 }

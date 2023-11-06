@@ -1,10 +1,9 @@
 package user
 
 import (
-	"strconv"
-
 	"github.com/aldhipradana/apidemo/schemas"
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )
 
@@ -30,7 +29,7 @@ func (h *apiHandler) RegisterRoutes(r *gin.Engine) {
 // @Description Create user
 // @Accept  json
 // @Produce  json
-// @Param user body schemas.User true "User"
+// @Param user body schemas.UserDTO true "User"
 // @Success 200 {object} schemas.User
 // @Router /user/create [post]
 func (h *apiHandler) Create(c *gin.Context) {
@@ -58,7 +57,7 @@ func (h *apiHandler) Create(c *gin.Context) {
 // @Success 200 {object} schemas.User
 // @Router /user/{id} [get]
 func (h *apiHandler) GetById(c *gin.Context) {
-	id := c.Param("id")
+	id := uuid.FromStringOrNil(c.Param("id"))
 	user, err := h.uc.GetById(id)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
@@ -93,7 +92,7 @@ func (h *apiHandler) List(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "User ID"
-// @Param user body schemas.User true "User"
+// @Param user body schemas.UserDTO true "User"
 // @Success 200 {object} schemas.User
 // @Router /user/{id} [put]
 func (h *apiHandler) Update(c *gin.Context) {
@@ -103,14 +102,7 @@ func (h *apiHandler) Update(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-
-	uid, e2 := strconv.ParseUint(id, 10, 64)
-	if e2 != nil {
-		c.JSON(400, gin.H{"error": e2.Error()})
-		return
-	}
-
-	user.ID = uint(uid)
+	user.ID = uuid.FromStringOrNil(id)
 	if err := h.uc.Update(&user); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -129,14 +121,9 @@ func (h *apiHandler) Update(c *gin.Context) {
 // @Success 200 {object} string
 // @Router /user/{id} [delete]
 func (h *apiHandler) Delete(c *gin.Context) {
-	id := c.Param("id")
-	uid, e2 := strconv.ParseUint(id, 10, 64)
-	if e2 != nil {
-		c.JSON(400, gin.H{"error": e2.Error()})
-		return
-	}
+	id := uuid.FromStringOrNil(c.Param("id"))
 
-	if err := h.uc.Delete(uint(uid)); err != nil {
+	if err := h.uc.Delete(id); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}

@@ -1,10 +1,9 @@
 package user
 
 import (
-	"crypto/md5"
-	"encoding/hex"
-
 	"github.com/aldhipradana/apidemo/schemas"
+	"github.com/aldhipradana/apidemo/utils"
+	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )
 
@@ -13,17 +12,15 @@ type Usecases struct {
 }
 
 func (u *Usecases) Create(user *schemas.User) error {
-	hash := md5.New()
 
-	// md5 hash user password
-	hash.Write([]byte(user.Password))
-	hashed := hash.Sum(nil)
-	user.Password = hex.EncodeToString(hashed)
+	user.ID = uuid.NewV4()
+
+	user.Password = utils.HashMD5(user.Password)
 
 	return u.Db.Create(user).Error
 }
 
-func (u *Usecases) GetById(id string) (*schemas.User, error) {
+func (u *Usecases) GetById(id uuid.UUID) (*schemas.User, error) {
 	var user schemas.User
 	err := u.Db.First(&user, id).Error
 	return &user, err
@@ -36,9 +33,19 @@ func (u *Usecases) List() ([]schemas.User, error) {
 }
 
 func (u *Usecases) Update(user *schemas.User) error {
-	return u.Db.Save(user).Error
+	us, err := u.GetById(user.ID)
+	if err != nil {
+		return err
+	}
+
+	user.CreatedAt = us.CreatedAt
+	user.UpdatedAt = us.UpdatedAt
+	user.Password = utils.HashMD5(user.Password)
+
+	// dont update nil value
+	return u.Db.Model(user).Updates(user).Error
 }
 
-func (u *Usecases) Delete(id uint) error {
+func (u *Usecases) Delete(id uuid.UUID) error {
 	return u.Db.Delete(&schemas.User{}, id).Error
 }

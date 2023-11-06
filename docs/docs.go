@@ -15,6 +15,167 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/notes/create": {
+            "post": {
+                "description": "Create notes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Create notes",
+                "parameters": [
+                    {
+                        "description": "Notes",
+                        "name": "notes",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.NotesDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Notes"
+                        }
+                    }
+                }
+            }
+        },
+        "/notes/list": {
+            "post": {
+                "description": "List notes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "List notes",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/schemas.Notes"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/notes/{id}": {
+            "get": {
+                "description": "Get notes by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Get notes by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Notes ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Notes"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update notes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Update notes",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Notes ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Notes",
+                        "name": "notes",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.NotesDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Notes"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete notes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Delete notes",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Notes ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/create": {
             "post": {
                 "description": "Create user",
@@ -35,7 +196,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schemas.User"
+                            "$ref": "#/definitions/schemas.UserDTO"
                         }
                     }
                 ],
@@ -132,7 +293,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schemas.User"
+                            "$ref": "#/definitions/schemas.UserDTO"
                         }
                     }
                 ],
@@ -178,10 +339,49 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "schemas.User": {
-            "description": "User model",
+        "schemas.Notes": {
             "type": "object",
             "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "schemas.NotesDTO": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "schemas.User": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -189,7 +389,27 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "schemas.UserDTO": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
                 },
                 "last_name": {
                     "type": "string"

@@ -1,14 +1,52 @@
 basePath: /
 definitions:
-  schemas.User:
-    description: User model
+  schemas.Notes:
     properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  schemas.NotesDTO:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  schemas.User:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
       email:
         type: string
       first_name:
         type: string
       id:
-        type: integer
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  schemas.UserDTO:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
       last_name:
         type: string
       password:
@@ -21,6 +59,112 @@ info:
   title: API Demo Swagger API
   version: "1.0"
 paths:
+  /notes/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete notes
+      parameters:
+      - description: Notes ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Delete notes
+      tags:
+      - Notes
+    get:
+      consumes:
+      - application/json
+      description: Get notes by ID
+      parameters:
+      - description: Notes ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.Notes'
+      summary: Get notes by ID
+      tags:
+      - Notes
+    put:
+      consumes:
+      - application/json
+      description: Update notes
+      parameters:
+      - description: Notes ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Notes
+        in: body
+        name: notes
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.NotesDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.Notes'
+      summary: Update notes
+      tags:
+      - Notes
+  /notes/create:
+    post:
+      consumes:
+      - application/json
+      description: Create notes
+      parameters:
+      - description: Notes
+        in: body
+        name: notes
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.NotesDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.Notes'
+      summary: Create notes
+      tags:
+      - Notes
+  /notes/list:
+    post:
+      consumes:
+      - application/json
+      description: List notes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/schemas.Notes'
+            type: array
+      summary: List notes
+      tags:
+      - Notes
   /user/{id}:
     delete:
       consumes:
@@ -77,7 +221,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/schemas.User'
+          $ref: '#/definitions/schemas.UserDTO'
       produces:
       - application/json
       responses:
@@ -99,7 +243,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/schemas.User'
+          $ref: '#/definitions/schemas.UserDTO'
       produces:
       - application/json
       responses:

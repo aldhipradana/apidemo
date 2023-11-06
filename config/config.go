@@ -50,6 +50,7 @@ func GetDb() *gorm.DB {
 
 		err = db.AutoMigrate(
 			schemas.User{},
+			schemas.Notes{},
 		)
 		if err != nil {
 			log.Fatal("Cannot migrate database", err)
