@@ -41,6 +41,11 @@ func main() {
 
 	app.RegisterRoutes()
 
+	// register ping handler
+	app.Ge.GET("/", func(c *gin.Context) {
+		c.String(200, "APIDEMO is running")
+	})
+
 	fmt.Println("Starting server on port 8082")
 	fmt.Println("Swagger docs on http://localhost:8082/apiDocs/index.html")
 	router.Run(":8082")
